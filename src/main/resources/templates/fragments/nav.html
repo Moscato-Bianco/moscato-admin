@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lagn="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="sidebarFragment">
+    <div id="sidebar" class="active">
+      <div class="sidebar-wrapper active">
+        <div class="sidebar-header">
+          <div class="d-flex justify-content-between">
+            <div class="logo">
+              <a href="index.html"><img src="/assets/images/logo/logo.png" alt="Logo" srcset=""></a>
+            </div>
+            <div class="toggler">
+              <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+            </div>
+          </div>
+        </div>
+        <th:block
+                th:with="currentUri=${#httpServletRequest.getRequestURI().toLowerCase()}"
+        >
+        <div class="sidebar-menu">
+          <ul class="menu">
+            <li class="sidebar-title">Menu</li>
+
+            <li class="sidebar-item active">
+              <a href="/dashboard/index" class='sidebar-link'>
+                <i class="bi bi-grid-fill"></i>
+                <span>Dashboard</span>
+              </a>
+            </li>
+
+
+            <li th:class="${ #httpServletRequest.getRequestURI().toLowerCase().contains('/product/') ? 'sidebar-item active has-sub' : 'sidebar-item has-sub'}">
+              <a href="#" class='sidebar-link'>
+                <i class="bi bi-stack"></i>
+                <span>제품 관리</span>
+              </a>
+
+              <ul th:class="${ #httpServletRequest.getRequestURI().toLowerCase().contains('/product/') ? 'submenu active' : 'submenu'}">
+                <li th:class="${ #httpServletRequest.getRequestURI().toLowerCase().contains('/product/info') ? 'submenu-item active' : 'submenu-item'}">
+                  <a href="/product/info">제품 정보 조회</a>
+                </li>
+                <li th:class="${ #httpServletRequest.getRequestURI().toLowerCase().contains('/product/spec') ? 'submenu-item active' : 'submenu-item'}">
+                  <a href="/product/spec">제품 스펙 조회</a>
+                </li>
+              </ul>
+            </li>
+
+          </ul>
+        </div>
+        <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+        </th:block>
+      </div>
+    </div>
+
+
+</th:block>
+</html>

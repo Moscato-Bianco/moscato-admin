@@ -1,0 +1,27 @@
+server:
+  port: 8090
+
+spring:
+  profiles:
+    active: local
+
+  thymeleaf:
+    prefix: classpath:templates/
+    suffix: .html
+    cache: false
+    check-template-location: true
+    mode: HTML
+
+--- # local
+server:
+  port: 8090
+
+spring:
+
+  devtools:
+    livereload:
+      enabled: true
+  config:
+    activate:
+      on-profile: local
+

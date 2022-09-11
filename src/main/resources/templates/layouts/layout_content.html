@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" data-textdirection="ltr" class="loading">
+
+<th:block th:fragment="funcFragment">
+
+<th:block th:replace="fragments/head::headFragment"></th:block>
+<th:block th:replace="fragments/script::scriptFragment"></th:block>
+<body>
+
+<script type="text/javascript">
+    $(function(){
+        $(document).ajaxSuccess(function() {
+
+        });
+
+        $.ajaxSetup({
+            statusCode : {
+                401 : function () {
+                    location.href="/";
+                },
+                404 : function () {
+                    location.href="error/error404";
+                }
+            }
+        });
+    });
+</script>
+
+
+</body>
+
+</th:block>
+</html>
