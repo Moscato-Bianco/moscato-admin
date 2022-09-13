@@ -5,6 +5,21 @@ spring:
   profiles:
     active: local
 
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://moscato.czentzrlzljh.ap-northeast-2.rds.amazonaws.com:3306/moscato_main?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&useSSL=false
+    username: master
+    password: moscato!
+    dbcp2:
+      test-on-borrow: true
+      test-while-idle: true
+      validation-query: SELECT 1
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
   thymeleaf:
     prefix: classpath:templates/
     suffix: .html
@@ -17,6 +32,21 @@ server:
   port: 8090
 
 spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://moscato.czentzrlzljh.ap-northeast-2.rds.amazonaws.com:3306/moscato_main?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&useSSL=false
+    username: master
+    password: moscato!
+    dbcp2:
+      test-on-borrow: true
+      test-while-idle: true
+      validation-query: SELECT 1
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
 
   devtools:
     livereload:
