@@ -40,7 +40,7 @@
           <ul class="menu">
             <li class="sidebar-title">Menu</li>
 
-            <li class="sidebar-item active">
+            <li th:class="${ #httpServletRequest.getRequestURI().toLowerCase().contains('/dashboard/') ? 'sidebar-item active' : 'sidebar-item'}">
               <a href="/dashboard/index" class='sidebar-link'>
                 <i class="bi bi-grid-fill"></i>
                 <span>Dashboard</span>
@@ -55,8 +55,8 @@
               </a>
 
               <ul th:class="${ #httpServletRequest.getRequestURI().toLowerCase().contains('/product/') ? 'submenu active' : 'submenu'}">
-                <li th:class="${ #httpServletRequest.getRequestURI().toLowerCase().contains('/product/info') ? 'submenu-item active' : 'submenu-item'}">
-                  <a href="/product/info">제품 정보 조회</a>
+                <li th:class="${ #httpServletRequest.getRequestURI().toLowerCase().contains('/product/index') ? 'submenu-item active' : 'submenu-item'}">
+                  <a href="/product/index">제품 정보 조회</a>
                 </li>
                 <li th:class="${ #httpServletRequest.getRequestURI().toLowerCase().contains('/product/spec') ? 'submenu-item active' : 'submenu-item'}">
                   <a href="/product/spec">제품 스펙 조회</a>
