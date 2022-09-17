@@ -3,6 +3,12 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default-layout}"
 >
+<head>
+    <style>
+        .pull-left{float:left!important;}
+        .pull-right{float:right!important;}
+    </style>
+</head>
 
 <th:block layout:fragment="content">
 
@@ -32,17 +38,13 @@
                     <div class="row">
                         <div class="col-2">
                             <div class="form-group">
-                                <label for="category">카테고리</label>
-                                <select class="form-select" id="category">
-                                    <option>IT</option>
-                                    <option>Blade Runner</option>
-                                    <option>Thor Ragnarok</option>
-                                </select>
+                                <label for="category_12">카테고리</label>
+                                <select class="form-control" id="category_12"></select>
                             </div>
                         </div>
                         <div class="col-2">
                             <div class="form-group">
-                                <label for="is_use">사용 여부</label>
+                                <label for="is_use">제품 사용 여부</label>
                                 <select class="form-select" id="is_use">
                                     <option value="">전체</option>
                                     <option value="1">사용 중</option>
@@ -56,7 +58,7 @@
                         </div>
                         <div class="col-12">
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="제품명 또는 브랜드를 입력하세요" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                                <input type="text" class="form-control" placeholder="제품명 또는 브랜드를 입력하세요" aria-label="Recipient's username" aria-describedby="basic-addon2" id="keywordSearch" oninput="search(this.value)">
                                 <span class="input-group-text" id="basic-addon2">
                                     <svg class="bi" width="1em" height="1em" fill="currentColor">
                                         <use xlink:href="/assets/vendors/bootstrap-icons/bootstrap-icons.svg#search"></use>
@@ -71,16 +73,18 @@
         <section class="section">
             <div class="card">
                 <div class="card-body">
-                    <table id="productTable" class="table table-valign-middle table-bordered table-hover" >
+                    <table id="productTable" class="table table-valign-middle table-bordered table-hover">
                         <thead>
                         <tr class="text-center">
-                            <th>고유번호</th>
-                            <th>키워드명</th>
-                            <th>유형</th>
-                            <th>브랜드명</th>
-                            <th>갱신일자</th>
-                            <th>업데이트</th>
-                            <th>작업</th>
+                            <th>일련번호</th>
+                            <th>카테고리 ID</th>
+                            <th>제품명</th>
+                            <th>수집 제품명</th>
+                            <th>브랜드</th>
+                            <th>가격</th>
+                            <th>출시일</th>
+                            <th>단종일</th>
+                            <th>사용여부</th>
                         </tr>
                         </thead>
                         <!-- tbody 태그 필요 없다. -->
@@ -93,4 +97,116 @@
 </html>
 
 <script type="text/javascript">
+    category_list(1)
+        var lang_kor = {
+            paginate : {
+                "first" : "처음",
+                "previous" : "이전",
+                "next" : "다음",
+                "last" : "마지막"
+            },
+            emptyTable : '해당 조건에 맞는 데이터가 없습니다.'
+        };
+
+        var table = $('table#productTable').DataTable({
+            dom: '<"pull-right"f><"pull-left"l>tip',
+            pageLength: 20,
+            pagingType : "full_numbers",
+            bPaginate: true,
+            bLengthChange: true,
+            bAutoWidth: false,
+            processing: true,
+            ordering: true,
+            responsive: true,
+            serverSide: true,
+            lengthMenu : [ [ 10, 20, 40, 100 ], [ 10, 20, 40, 100] ],
+            language : lang_kor,
+            ajax : {
+                url: '/product/r/lists-advanced',
+            },
+            columns: [
+                {
+                    data: 'productId',
+                    width: "10%",
+                    className: "text-center"
+                },
+                {
+                    data: 'categoryId',
+                    width: "10%",
+                    className: "text-center"
+                },
+                {
+                    data: 'name',
+                    width: "20%",
+                    className: "text-center",
+                    render: function (data) { return data ? data : '-'; }
+                },
+                {
+                    data: 'originName',
+                    width: "20%",
+                    className: "text-center",
+                },
+                {
+                    data: 'brand',
+                    width: "10%",
+                    className: "text-center",
+                },
+                {
+                    data: 'price',
+                    width: "6%",
+                    className: "text-center",
+                    render: function (data) {
+                        return Math.round((data + Number.EPSILON) * 100) / 100;
+                    }
+                },
+                {
+                    data: 'releaseDate',
+                    width: "8%",
+                    className: "text-center",
+                },
+                {
+                    data: 'endDate',
+                    width: "8%",
+                    className: "text-center",
+                    render: function (data) { return data ? data : '-'; }
+                },
+                {
+                    data: 'isUse',
+                    width: "8%",
+                    className: "text-center",
+                    render: function (data) { return data ? data : '-'; }
+                }
+
+            ],
+            "fnDrawCallback": function(oSettings) {
+                // search 옵션 적용 시 filter 사용 불가능
+                $("#productTable_filter").empty();
+                $("#productTable_filter").remove();
+            }
+        });
+
+    function category_list(level) {
+        callService('/category/list', {level: level}).then(function(data) {
+            if(level ==1) labelName = "카테고리";
+
+            $("#category_12").append('<optgroup label="' + labelName + '">전체</optgroup>');
+            $.each(data, function(idx, item){
+                $("#category_12").append('<option value="'+item.categoryId+'" data-name="'+item.categoryName+'">'+item.categoryName+'</option>');
+            });
+        });
+    }
+
+    $('select#category_12').change(function() {
+        var filter = $(this).val();
+        table.column(1).search(filter).draw();
+    });
+
+    $('select#is_use').change(function() {
+        var filter = $(this).val();
+        table.column(8).search(filter).draw();
+    })
+
+    function search(val) {
+        table.column(2).search(val).draw();
+    }
 </script>

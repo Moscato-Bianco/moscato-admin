@@ -38,6 +38,9 @@ dependencies {
 	implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.13'
 	runtimeOnly 'mysql:mysql-connector-java'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
+	// spring-jpa- datatables
+	implementation group: 'com.github.darrachequesne', name: 'spring-data-jpa-datatables', version: '5.2.0'
 }
 
 tasks.named('test') {
